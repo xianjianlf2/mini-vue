@@ -1,19 +1,23 @@
 class ReactiveEffect {
   private _fn: any
-  constructor(fn) {
+  constructor(fn, public scheduler?) {
     this._fn = fn
   }
   run() {
     activeEffect = this
-    this._fn()
+    return this._fn()
   }
 }
 let activeEffect
-export function effect(fn) {
+export function effect(fn, options: any = {}) {
   // fn
-  const _effect = new ReactiveEffect(fn)
+  const _effect = new ReactiveEffect(fn, options.scheduler)
 
   _effect.run()
+
+  // 把 _effect.run 这个方法返回
+  // 让用户可以自行选择调用的时机（调用 fn）
+  return _effect.run.bind(_effect)
 }
 
 const targetMap = new Map()
@@ -31,7 +35,7 @@ export function track(target, key) {
 
   if (!dep) {
     dep = new Set()
-    depsMap.set(target, depsMap)
+    depsMap.set(key, dep)
   }
 
   dep.add(activeEffect)
@@ -43,6 +47,10 @@ export function trigger(target, key) {
   let dep = depsMap.get(key)
 
   for (const effect of dep) {
-    effect.run()
+    if (effect.scheduler) {
+      effect.scheduler()
+    } else {
+      effect.run()
+    }
   }
 }
