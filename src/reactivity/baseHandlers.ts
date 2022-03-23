@@ -1,6 +1,7 @@
 //高阶函数
 
 import { track, trigger } from './effect'
+import { ReactiveFlags } from './reactive'
 
 // 优化点1：在初始化的时候只生成一次
 // 避免了重复创建getter
@@ -10,6 +11,12 @@ const readonlyGet = createGetter(true)
 
 function createGetter(isReadonly = false) {
   return function get(target, key) {
+    if (key === ReactiveFlags.IS_REACTIVE) {
+      return !isReadonly
+    }else if(key===ReactiveFlags.IS_READONLY){
+      return isReadonly
+    }
+
     const res = Reflect.get(target, key)
 
     if (!isReadonly) {
