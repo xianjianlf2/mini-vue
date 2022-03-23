@@ -1,23 +1,54 @@
+import { extend } from '../shared'
+
+let activeEffect
 class ReactiveEffect {
   private _fn: any
-  constructor(fn, public scheduler?) {
-    this._fn = fn
+  deps = []
+  active = true
+  onStop?: () => void
+  constructor(fn, public scheduler?: Function) {
+    ;(this._fn = fn), (this.scheduler = scheduler)
   }
+
   run() {
+    if (!this.active) {
+      return this._fn()
+    }
     activeEffect = this
-    return this._fn()
+    const r = this._fn()
+    return r
+  }
+
+  stop() {
+    if (this.active) {
+      cleanupEffect(this)
+      if (this.onStop) {
+        this.onStop()
+      }
+      this.active = false
+    }
   }
 }
-let activeEffect
+
+function cleanupEffect(effect) {
+  effect.deps.forEach((dep: any) => {
+    dep.delete(effect)
+  })
+}
+
 export function effect(fn, options: any = {}) {
   // fn
   const _effect = new ReactiveEffect(fn, options.scheduler)
+  extend(_effect, options)
 
   _effect.run()
 
+  const runner: any = _effect.run.bind(_effect)
+  runner.effect = _effect
+
   // 把 _effect.run 这个方法返回
   // 让用户可以自行选择调用的时机（调用 fn）
-  return _effect.run.bind(_effect)
+  return runner
 }
 
 const targetMap = new Map()
@@ -37,8 +68,10 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
+  if (!activeEffect) return
 
   dep.add(activeEffect)
+  activeEffect.deps.push(dep)
 }
 
 export function trigger(target, key) {
@@ -53,4 +86,8 @@ export function trigger(target, key) {
       effect.run()
     }
   }
+}
+
+export function stop(runner) {
+  runner.effect.stop()
 }

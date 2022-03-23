@@ -10,3 +10,4 @@ describe('reactive', () => {
     expect(observed.foo).toBe(1)
   })
 })
+ 
