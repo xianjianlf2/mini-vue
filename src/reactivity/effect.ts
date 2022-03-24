@@ -1,6 +1,7 @@
 import { extend } from '../shared'
 
 let activeEffect
+let shouldTrack = false
 class ReactiveEffect {
   private _fn: any
   deps = []
@@ -14,8 +15,15 @@ class ReactiveEffect {
     if (!this.active) {
       return this._fn()
     }
+
+    // 依赖收集
+    shouldTrack = true
     activeEffect = this
     const r = this._fn()
+
+    // 重置
+    shouldTrack = false
+
     return r
   }
 
@@ -55,7 +63,7 @@ const targetMap = new Map()
 export function track(target, key) {
   // set 不能重复
   // target -> key -> dep
-
+  if (!isTracking()) return
   let depsMap = targetMap.get(target)
   if (!depsMap) {
     depsMap = new Map()
@@ -68,10 +76,19 @@ export function track(target, key) {
     dep = new Set()
     depsMap.set(key, dep)
   }
-  if (!activeEffect) return
+
+  trackEffects(dep)
+}
+
+export function trackEffects(dep) {
+  if (!isTracking()) return
 
   dep.add(activeEffect)
   activeEffect.deps.push(dep)
+}
+
+export function isTracking() {
+  return shouldTrack && activeEffect !== undefined
 }
 
 export function trigger(target, key) {
@@ -79,6 +96,10 @@ export function trigger(target, key) {
 
   let dep = depsMap.get(key)
 
+  triggerEffects(dep)
+}
+
+export function triggerEffects(dep) {
   for (const effect of dep) {
     if (effect.scheduler) {
       effect.scheduler()
