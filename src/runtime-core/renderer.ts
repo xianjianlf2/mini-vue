@@ -9,8 +9,10 @@ export function render(vnode, container) {
 
 function patch(vnode, container) {
   // 去处理 组件
+  // TODO 判断是不是 element 类型
+  // 如何区分 element 类型和 Component类型
+  // processElement()
 
-  // 判断是不是 element 类型
   processComponent(vnode, container)
 }
 

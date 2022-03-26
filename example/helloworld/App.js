@@ -1,15 +1,12 @@
-export const App = {
-  // <template></template>
-  // render
+import { h } from '../../lib/guide-mini-vue.esm.js'
 
+export const App = {
   render() {
-    //UI 逻辑
-    return h('div', 'hi,' + this.msg)
+    // ui
+    return h('div', 'hi, ' + this.msg)
   },
 
   setup() {
-    // composition api
-
     return {
       msg: 'mini-vue',
     }
