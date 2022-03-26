@@ -36,7 +36,7 @@ describe('computed', () => {
     expect(getter).toHaveBeenCalledTimes(1)
 
     // should not compute until needed
-    value.foo = 2  // 触发trigger
+    value.foo = 2 // 触发trigger
     expect(getter).toHaveBeenCalledTimes(1)
 
     // now it should compute
