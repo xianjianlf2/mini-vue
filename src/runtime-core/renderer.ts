@@ -1,3 +1,4 @@
+import { ShapeFlags } from '../shared/ShapeFlags'
 import { isObject } from './../shared/index'
 import { createComponentInstance, setupComponent } from './component'
 
@@ -9,14 +10,12 @@ export function render(vnode, container) {
 }
 
 function patch(vnode, container) {
-  // 去处理 组件
-  // TODO 判断是不是 element 类型
-  // 如何区分 element 类型和 Component类型
-  // processElement()
-  console.log(vnode.type)
-  if (typeof vnode.type === 'string') {
+  // ShapeFlags
+  // 标识 虚拟节点 属于哪个
+  const { shapeFlag } = vnode
+  if (shapeFlag & ShapeFlags.ELEMENT) {
     processElement(vnode, container)
-  } else if (isObject(vnode.type)) {
+  } else if (shapeFlag & ShapeFlags.STATEFUL_COMPONENT) {
     processComponent(vnode, container)
   }
 }
@@ -29,12 +28,13 @@ function processElement(vnode: any, container: any) {
 function mountElement(vnode: any, container: any) {
   const el = (vnode.el = document.createElement(vnode.type))
 
-  const { children } = vnode
+  const { children, shapeFlag } = vnode
 
   // 处理子节点
-  if (typeof children === 'string') {
+  if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+    // text children
     el.textContent = children
-  } else if (Array.isArray(children)) {
+  } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
     // vnode
     // 传入容器  应该是挂载到父节点上面
     mountChildren(vnode, el)
