@@ -1,3 +1,4 @@
+import { Foo } from './Foo.js'
 import { h } from '../../lib/guide-mini-vue.esm.js'
 
 window.self = null
@@ -21,7 +22,13 @@ export const App = {
       // setupState
       // this.$el
       // 解决问题：使用Proxy代理对象来完成挂载
-      'hi,' + this.msg
+      // 'hi,' + this.msg
+      [
+        h('div', {}, 'hi,' + this.msg),
+        h(Foo, {
+          count: 1,
+        }),
+      ]
       // [
       //   h(
       //     'p',
