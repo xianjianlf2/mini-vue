@@ -21,32 +21,15 @@ function patch(vnode, container) {
   }
 }
 
-function processComponent(vnode: any, container: any) {
-  mountComponent(vnode, container)
-}
-function mountComponent(vnode: any, container) {
-  const instance = createComponentInstance(vnode)
-
-  setupComponent(instance)
-  setupRenderEffect(instance, container)
-}
-function setupRenderEffect(instance: any, container) {
-  const subTree = instance.render()
-
-  patch(subTree, container)
-
-  // vnode -> patch
-  // vnode ->element -> mountElement
-}
 function processElement(vnode: any, container: any) {
   // element 分为初始化和更新
   mountElement(vnode, container)
 }
 
 function mountElement(vnode: any, container: any) {
-  const el = document.createElement(vnode.type)
+  const el = (vnode.el = document.createElement(vnode.type))
 
-  var children = vnode.children
+  const { children } = vnode
 
   // 处理子节点
   if (typeof children === 'string') {
@@ -73,4 +56,30 @@ function mountChildren(vnode, container) {
   vnode.children.forEach((v) => {
     patch(v, container)
   })
+}
+
+function processComponent(vnode: any, container: any) {
+  mountComponent(vnode, container)
+}
+function mountComponent(initialVNode: any, container) {
+  const instance = createComponentInstance(initialVNode)
+
+  setupComponent(instance)
+  setupRenderEffect(instance, initialVNode, container)
+}
+
+function setupRenderEffect(instance: any, initialVNode, container) {
+  const { proxy } = instance
+  // 绑定
+  const subTree = instance.render.call(proxy)
+
+  patch(subTree, container)
+
+  // vnode -> patch
+  // vnode ->element -> mountElement
+
+  // element -> mount 所有的element处理完成
+  initialVNode.el = subTree.el
+
+  initialVNode.el = subTree.el
 }
