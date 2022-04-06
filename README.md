@@ -3,42 +3,51 @@
 - 实现 Vue3 核心逻辑最简模型
 - 相关文档
 
-## Tasking
-
----
-
-### runtime-core
-
-- [ ] 支持组件类型
-- [ ] 支持 element 类型
-- [ ] 初始化 props
-- [ ] setup 可获取 props 和 context
-- [ ] 支持 component emit
-- [ ] 支持 proxy
-- [ ] 可以在 render 函数中获取 setup 返回的对象
-- [ ] nextTick 的实现
-- [ ] 支持 getCurrentInstance
-- [ ] 支持 provide/inject
-- [ ] 支持最基础的 slots
-- [ ] 支持 Text 类型节点
-- [ ] 支持 $el api
-
-### reactivity
-
-目标是用自己的 reactivity 支持现有的 demo 运行
-
-- [x] reactive 的实现
-- [x] ref 的实现
-- [x] readonly 的实现
-- [x] computed 的实现
-- [x] track 依赖收集
-- [x] trigger 触发依赖
-- [x] 支持 isReactive
-- [x] 支持嵌套 reactive
-- [ ] 支持 toRaw
-- [ ] 支持 effect.scheduler
-- [ ] 支持 effect.stop
-- [ ] 支持 isReadonly
-- [ ] 支持 isProxy
-- [ ] 支持 shallowReadonly
-- [ ] 支持 proxyRefs
+<!--filetoc-start-->
+- [测试用例](https://github.com/xianjianlf2/mini-vue/tree/main/example)
+  - [apiInject](https://github.com/xianjianlf2/mini-vue/tree/main/example/apiInject) 
+  - [componentEmit](https://github.com/xianjianlf2/mini-vue/tree/main/example/componentEmit)
+  - [componentSlot](https://github.com/xianjianlf2/mini-vue/tree/main/example/componentSlot)
+  - [currentInstance](https://github.com/xianjianlf2/mini-vue/tree/main/example/currentInstance)
+  - [customerRenderer](https://github.com/xianjianlf2/mini-vue/tree/main/example/customerRenderer)
+  - [patchChildren](https://github.com/xianjianlf2/mini-vue/tree/main/example/patchChildren)
+  - [update](https://github.com/xianjianlf2/mini-vue/tree/main/example/update)
+- [库文件](https://github.com/xianjianlf2/mini-vue/tree/main/lib)
+  - [guide-mini-vue.cjs.js](https://github.com/xianjianlf2/mini-vue/tree/main/lib/guide-mini-vue.cjs.js)
+  - [guide-mini-vue.esm.js](https://github.com/xianjianlf2/mini-vue/tree/main/lib/guide-mini-vue.esm.js)
+- [源码](https://github.com/xianjianlf2/mini-vue/tree/main/src)
+  - [reactivity](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity)
+    - [test case](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests)
+      - [computed.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/computed.spec.ts)
+      - [effect.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/effect.spec.ts)
+      - [reactive.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/reactive.spec.ts)
+      - [readonly.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/readonly.spec.ts)
+      - [ref.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/ref.spec.ts)
+      - [shallowReadonly.spec.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/tests/shallowReadonly.spec.ts)
+    - [baseHandlers.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/baseHandlers.ts)
+    - [computed.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/computed.ts)
+    - [effect.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/effect.ts)
+    - [index.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/index.ts)
+    - [reactive.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/reactive.ts)
+    - [ref.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/reactivity/ref.ts)
+  - [runtime-core](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core)
+    - [helpers](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/helpers)
+      - [renderSlots.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/helpers/renderSlots.ts)
+    - [apiInject.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/apiInject.ts)
+    - [component.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/component.ts)
+    - [componentEmit.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/componentEmit.ts)
+    - [componentProps.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/componentProps.ts)
+    - [componentPublicInstance.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/componentPublicInstance.ts)
+    - [componentSlots.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/componentSlots.ts)
+    - [createApp.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/createApp.ts)
+    - [h.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/h.ts)
+    - [index.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/index.ts)
+    - [renderer.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/renderer.ts)
+    - [vnode.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-core/vnode.ts)
+  - [runtime-dom](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-dom)
+    - [index.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/runtime-dom/index.ts)
+  - [shared](https://github.com/xianjianlf2/mini-vue/tree/main/src/shared)
+    - [index.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/shared/index.ts)
+    - [ShapeFlags.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/shared/ShapeFlags.ts)
+  - [index.ts](https://github.com/xianjianlf2/mini-vue/tree/main/src/index.ts)
+    <!--filetoc-end-->
