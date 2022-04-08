@@ -91,23 +91,49 @@ import { ref, h } from '../../lib/guide-mini-vue.esm.js'
 //    3. 移动 (节点存在于新的和老的里面，但是位置变了)
 //         - 使用最长子序列来优化
 
+// const prevChildren = [
+//   h('p', { key: 'A' }, 'A'),
+//   h('p', { key: 'B' }, 'B'),
+//   h('p', { key: 'C', id: 'c-prev' }, 'C'),
+//   h('p', { key: 'D' }, 'D'),
+//   h('p', { key: 'E' }, 'E'),
+//   h('p', { key: 'F' }, 'F'),
+//   h('p', { key: 'G' }, 'G'),
+//   h('p', { key: 'H' }, 'H'),
+// ]
+// const nextChildren = [
+//   h('p', { key: 'A' }, 'A'),
+//   h('p', { key: 'B' }, 'B'),
+//   h('p', { key: 'E' }, 'E'),
+//   h('p', { key: 'C', id: 'c-next' }, 'C'),
+//   h('p', { key: 'F' }, 'F'),
+//   h('p', { key: 'H' }, 'H'),
+// ]
+
+// 综合例子
+// a,b,(c,d,e,z),f,g
+// a,b,(d,c,y,e),f,g
+
 const prevChildren = [
   h('p', { key: 'A' }, 'A'),
   h('p', { key: 'B' }, 'B'),
-  h('p', { key: 'C', id: 'c-prev' }, 'C'),
+  h('p', { key: 'C' }, 'C'),
   h('p', { key: 'D' }, 'D'),
   h('p', { key: 'E' }, 'E'),
+  h('p', { key: 'Z' }, 'Z'),
   h('p', { key: 'F' }, 'F'),
   h('p', { key: 'G' }, 'G'),
-  h('p', { key: 'H' }, 'H'),
 ]
+
 const nextChildren = [
   h('p', { key: 'A' }, 'A'),
   h('p', { key: 'B' }, 'B'),
+  h('p', { key: 'D' }, 'D'),
+  h('p', { key: 'C' }, 'C'),
+  h('p', { key: 'Y' }, 'Y'),
   h('p', { key: 'E' }, 'E'),
-  h('p', { key: 'C', id: 'c-next' }, 'C'),
   h('p', { key: 'F' }, 'F'),
-  h('p', { key: 'H' }, 'H'),
+  h('p', { key: 'G' }, 'G'),
 ]
 
 export default {
