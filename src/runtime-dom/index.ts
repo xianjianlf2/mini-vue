@@ -1,12 +1,12 @@
 import { createRenderer } from '../runtime-core'
 
 function createElement(type) {
-  console.log('createElement')
+  // console.log('createElement')
   return document.createElement(type)
 }
 
 function patchProp(el, key, prevVal, nextVal) {
-  console.log('patchProp-----------')
+  // console.log('patchProp-----------')
   const isOn = (key: string) => /^on[A-Z]/.test(key)
   if (isOn(key)) {
     const event = key.slice(2).toLowerCase()

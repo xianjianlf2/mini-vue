@@ -63,9 +63,9 @@ export function createRenderer(options) {
   }
 
   function patchElement(n1, n2, container, parentComponent, anchor) {
-    console.log('patchElement')
-    console.log('n1', n1)
-    console.log('n2', n2)
+    // console.log('patchElement')
+    // console.log('n1', n1)
+    // console.log('n2', n2)
 
     const oldProps = n1.props || EMPTY_OBJ
     const newProps = n2.props || EMPTY_OBJ
@@ -154,8 +154,8 @@ export function createRenderer(options) {
     // 新的节点比老的多  创建
     if (i > e1) {
       if (i <= e2) {
-        const nextPos = e2 + 1
-        const anchor = nextPos < l2 ? c2[nextPos].el : null
+        const nextPos = i + 1
+        const anchor = i + 1 < l2 ? c2[nextPos].el : null
         while (i <= e2) {
           patch(null, c2[i], container, parentComponent, anchor)
           i++
@@ -178,14 +178,7 @@ export function createRenderer(options) {
       let moved = false
       let maxNewIndexSoFar = 0
 
-      /**
-       * @description: 初始化映射表
-       * @param {*} let
-       * @return {*}
-       */
-      for (let i = 0; i < toBePatched; i++) {
-        newIndexToOldIndexMap[i] = 0
-      }
+      for (let i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
 
       // 节点中  key 的作用：前后作对比，更高效的去查找相同的节点
       for (let i = s2; i <= e2; i++) {
@@ -193,9 +186,8 @@ export function createRenderer(options) {
         keyToNewIndexMap.set(nextChild.key, i)
       }
 
-      for (let i = s1; i < e1; i++) {
+      for (let i = s1; i <= e1; i++) {
         const prevChild = c1[i]
-
         if (patched >= toBePatched) {
           hostRemove(prevChild.el)
           continue
@@ -205,13 +197,14 @@ export function createRenderer(options) {
         if (prevChild.key != null) {
           newIndex = keyToNewIndexMap.get(prevChild.key)
         } else {
-          for (let j = s2; j < s2; j++) {
+          for (let j = s2; j < e2; j++) {
             if (isSomeVNodeType(prevChild, c2[j])) {
               newIndex = j
               break
             }
           }
         }
+
         if (newIndex === undefined) {
           hostRemove(prevChild.el)
         } else {
@@ -232,12 +225,10 @@ export function createRenderer(options) {
         : []
 
       let j = increasingNewIndexSequence.length - 1
-
       for (let i = toBePatched - 1; i >= 0; i--) {
         const nextIndex = i + s2
         const nextChild = c2[nextIndex]
         const anchor = nextIndex + 1 < l2 ? c2[nextIndex + 1].el : null
-
         // 新创建
         if (newIndexToOldIndexMap[i] === 0) {
           patch(null, nextChild, container, parentComponent, anchor)
@@ -346,11 +337,11 @@ export function createRenderer(options) {
     // 依赖收集
     effect(() => {
       if (!instance.isMounted) {
-        console.log('init')
+        // console.log('init')
         const { proxy } = instance
         // 绑定
         const subTree = (instance.subTree = instance.render.call(proxy))
-        console.log(subTree)
+
         patch(null, subTree, container, instance, anchor)
         // vnode -> patch
         // vnode ->element -> mountElement
@@ -360,7 +351,7 @@ export function createRenderer(options) {
         initialVNode.el = subTree.el
         instance.isMounted = true
       } else {
-        console.log('update')
+        // console.log('update')
         const { proxy } = instance
         // 绑定
         const subTree = instance.render.call(proxy)
@@ -394,6 +385,7 @@ export function createRenderer(options) {
     createApp: createAppAPI(render),
   }
 }
+
 function getSequence(arr) {
   const p = arr.slice()
   const result = [0]
