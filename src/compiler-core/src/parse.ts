@@ -25,6 +25,10 @@ function parseChildren(context) {
     }
   }
 
+  if (!node) {
+    node = parseText(context)
+  }
+
   nodes.push(node)
 
   return nodes
@@ -45,11 +49,13 @@ function parseInterpolation(context) {
 
   const rawContentLength = closeIndex - openDelimiter.length
 
-  const rawcontent = context.source.slice(0, rawContentLength)
-  const content = rawcontent.trim()
+  const rawContent = parseTextData(context, rawContentLength)
+
+  const content = rawContent.trim()
+
+  advanceBy(context, closeDelimiter.length)
 
   // 删除处理完的字符
-  advanceBy(context, rawContentLength + closeDelimiter.length)
 
   return {
     type: NodeTypes.INTERPOLATION,
@@ -96,4 +102,19 @@ function parseTag(context: any, type: TagType) {
     type: NodeTypes.ELEMENT,
     tag: tag,
   }
+}
+function parseText(context: any): any {
+  // 获取 context
+  const content = parseTextData(context, context.source.length)
+  return {
+    type: NodeTypes.TEXT,
+    content,
+  }
+}
+
+function parseTextData(context: any, length) {
+  const content = context.source.slice(0, length)
+  // 推进
+  advanceBy(context, content.length)
+  return content
 }
