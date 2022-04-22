@@ -1,12 +1,12 @@
 import { NodeTypes } from './ast'
 
-export function transform(root, options) {
+export function transform(root, options = {}) {
   // 创建全局context
-
   const context = createTransformContext(root, options)
   // 深度优先搜索  （遍历）
-
   traverseNode(root, context)
+
+  createRootCodegen(root)
 }
 
 function createTransformContext(root: any, options: any) {
@@ -37,4 +37,7 @@ function traverseChildren(node: any, context: any) {
       traverseNode(node, context)
     }
   }
+}
+function createRootCodegen(root: any) {
+  root.codegenNode = root.children[0]
 }
