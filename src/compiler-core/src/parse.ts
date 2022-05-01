@@ -1,4 +1,4 @@
-import { NodeTypes } from './ast'
+import { NodeTypes } from "./ast"
 
 const enum TagType {
   Start,
@@ -18,9 +18,9 @@ function parseChildren(context, ancestors) {
     let node
     const s = context.source
 
-    if (s.startsWith('{{')) {
+    if (s.startsWith("{{")) {
       node = parseInterpolation(context)
-    } else if (s[0] === '<') {
+    } else if (s[0] === "<") {
       if (/[a-z]/i.test(s[1])) {
         node = parseElement(context, ancestors)
       }
@@ -39,8 +39,8 @@ function parseChildren(context, ancestors) {
 function parseInterpolation(context) {
   // 接收 {{message}}
 
-  const openDelimiter = '{{'
-  const closeDelimiter = '}}'
+  const openDelimiter = "{{"
+  const closeDelimiter = "}}"
 
   const closeIndex = context.source.indexOf(
     closeDelimiter,
@@ -76,6 +76,7 @@ function advanceBy(context: any, length: number) {
 function createRoot(children) {
   return {
     children,
+    type: NodeTypes.ROOT,
   }
 }
 function createParseContext(content: string) {
@@ -103,7 +104,7 @@ function parseElement(context: any, ancestors) {
 
 function startsWithEndTagOpen(source, tag) {
   return (
-    source.startsWith('</') &&
+    source.startsWith("</") &&
     source.slice(2, 2 + tag.length).toLowerCase() === tag.toLowerCase()
   )
 }
@@ -114,7 +115,7 @@ function startsWithEndTagOpen(source, tag) {
 function isEnd(context, ancestors) {
   const s = context.source
 
-  if (s.startsWith('</')) {
+  if (s.startsWith("</")) {
     for (let i = ancestors.length - 1; i >= 0; i--) {
       const tag = ancestors[i].tag
       if (startsWithEndTagOpen(s, tag)) {
@@ -139,7 +140,7 @@ function parseTag(context: any, type: TagType) {
 }
 function parseText(context: any) {
   let endIndex = context.source.length
-  let endTokens = ['<', '{{']
+  let endTokens = ["<", "{{"]
 
   for (let i = 0; i < endTokens.length; i++) {
     const index = context.source.indexOf(endTokens[i])
